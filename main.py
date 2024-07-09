@@ -9,12 +9,6 @@ from scenes import *
 # Initialize Pygame and create the screen    
 pygame.init()
 
-# Assets folder
-spritesheet = os.path.join(os.path.dirname(__file__),'assets/spritesheets')
-fonts = os.path.join(os.path.dirname(__file__),'assets/fonts')
-sounds = os.path.join(os.path.dirname(__file__),'assets/sounds')
-backgrounds = os.path.join(os.path.dirname(__file__),'assets/backgrounds')
-    
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Resource Manager
@@ -25,11 +19,10 @@ pygame.display.set_caption(TITLE)
     
 clock = pygame.time.Clock()  # Create clock to track time
 
-def showFPS(self, screen):
-  fps = int(self.clock.get_fps())
-  font_name = self.fonts['kenvector_future.ttf']
-  text = f"FPS: {fps}"
-  draw_text(screen, font_name, text, 16, 5, 5)     
+def showFPS():
+  fps = int(clock.get_fps())
+  text = f"{TITLE} FPS: {fps}"
+  pygame.display.set_caption(text)     
 
 
 def main():
@@ -46,11 +39,10 @@ def main():
     manager.draw(screen)
     pygame.display.flip()
     clock.tick(FPS)
-  
-  # Friendly exit
-  pygame.quit()
-  sys.exit(0)
-
+    
+    if DEBUG:
+      showFPS()
+    
 if __name__ == "__main__":
   os.system('clear')
   main()

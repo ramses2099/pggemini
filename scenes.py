@@ -2,6 +2,7 @@ import sys, os
 import pygame
 from abc import ABC, abstractmethod
 from constants import *
+from objects import *
 from utils import *
 
 # class base Scene
@@ -79,6 +80,27 @@ class GameScene(Scene):
         super().__init__()
         self.mg_resource = args[0]
         self.sprite = self.mg_resource.get_sprite('enemyRed1.png')
+        self.current_level_number = 1
+        self.player = Player(self.sprite)
+        
+    def showPlayerPoints(self, screen):    
+        points = self.player.points 
+        font = self.mg_resource.get_font('kenvector_future.ttf', 22)   
+        points_text = font.render(f"POINTS: {points}", True, WHITE)   
+        screen.blit(points_text, ((SCREEN_WIDTH-190), 43))
+        
+    def showLevel(self, screen):    
+        lvl = self.current_level_number
+        font = self.mg_resource.get_font('kenvector_future.ttf', 22)    
+        lvl_text = font.render(f"LEVEL: {lvl}", True, WHITE)   
+        screen.blit(lvl_text, (5, 25))
+        
+    def showLives(self, screen):
+        sprite = self.mg_resource.get_sprite('playerLife3_orange.png')
+        font = self.mg_resource.get_font('kenvector_future.ttf', 22)    
+        lvl_text = font.render(f"LIVES: {self.player.lives} x", True, WHITE)   
+        screen.blit(lvl_text, (SCREEN_WIDTH - 190, 20))
+        screen.blit(sprite, (SCREEN_WIDTH - 50, 20))
         
     def process_events(self, events):
         for event in events:
@@ -87,16 +109,23 @@ class GameScene(Scene):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.next_scene = MainMenu()
+                    self.next_scene = MainMenu(self.mg_resource)
 
     def update(self, dt):
         pass
 
     def draw(self, screen):
-        screen.fill(BLACK)        
+        screen.fill(BLACK)
+        # Show info Game
+        self.showLevel(screen)
+        self.showPlayerPoints(screen)
+        self.showLives(screen)
+                        
         font = self.mg_resource.get_font('kenvector_future.ttf', 74)
         text = font.render("Game Scene", True, WHITE)
         screen.blit(text, (SCREEN_WIDTH//2 - text.get_width()//2, SCREEN_HEIGHT//2 - text.get_height()//2))
+        
+        
         screen.blit(self.sprite,(100,100))
 
 # Scene manager
