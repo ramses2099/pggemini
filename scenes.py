@@ -82,6 +82,7 @@ class GameScene(Scene):
         self.sprite = self.mg_resource.get_sprite('enemyRed1.png')
         self.current_level_number = 1
         self.player = Player(self.sprite)
+        self.bar = ShieldBar(5, 50)
         
     def showPlayerPoints(self, screen):    
         points = self.player.points 
@@ -110,6 +111,10 @@ class GameScene(Scene):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.next_scene = MainMenu(self.mg_resource)
+                if event.key == pygame.K_0:
+                    self.bar.decrease_bar(5)
+                if event.key == pygame.K_1:
+                    self.bar.increment_bar(5)
 
     def update(self, dt):
         pass
@@ -125,7 +130,8 @@ class GameScene(Scene):
         text = font.render("Game Scene", True, WHITE)
         screen.blit(text, (SCREEN_WIDTH//2 - text.get_width()//2, SCREEN_HEIGHT//2 - text.get_height()//2))
         
-        
+        # bar
+        self.bar.draw(screen)
         screen.blit(self.sprite,(100,100))
 
 # Scene manager

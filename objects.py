@@ -1,6 +1,6 @@
 import random
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, YELLOW
+from constants import *
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, direction):
@@ -19,16 +19,16 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 class Player(pygame.sprite.Sprite):
-  def __init__(self, image):
+  def __init__(self, image:pygame.Surface):
     # call the parent class (Sprite) consturctor      
     pygame.sprite.Sprite.__init__(self)
     
-    self.image = image    
-    self.rect = self.image.get_rect()
+    self.image:pygame.Surface = image    
+    self.rect:pygame.rect.Rect = self.image.get_rect()
     self.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    self.speed = 300 #Pixels per second
+    self.speed:int = 300 #Pixels per second
     self.velocity = pygame.math.Vector2(0, 0)
-    self.bullets = pygame.sprite.Group()
+    self.bullets:pygame.sprite.Group = pygame.sprite.Group()
     self.lives = 3 # lives
     self.points = 0  # Points for the player
 
@@ -63,3 +63,28 @@ class Player(pygame.sprite.Sprite):
 
   def add_points(self, points):
     self.points += points
+    
+    
+class ShieldBar(pygame.sprite.Sprite):
+  def __init__(self, x: int , y: int)->None:
+    pygame.sprite.Sprite.__init__(self)
+    self.bar_length: int = 200
+    self.bar_height: int = 25
+    self.fill: float = 200
+    self.outline_rect: pygame.rect.Rect = pygame.Rect(x, y, self.bar_length, self.bar_height)
+    self.fill_rect: pygame.rect.Rect = pygame.rect.Rect(x, y, self.fill, self.bar_height)
+    
+  def increment_bar(self, value: int)->None:
+    if (self.fill < self.bar_length):
+      self.fill += value
+      self.fill_rect.width = int(self.fill)
+  
+  def decrease_bar(self, value: int)->None:
+    if(self.fill >= 10):
+      self.fill -= value
+      self.fill_rect.width = int(self.fill)  
+    
+  def draw(self, screen : pygame.surface.Surface):
+    pygame.draw.rect(screen, WHITE, self.outline_rect, 2)
+    pygame.draw.rect(screen, GREEN, self.fill_rect)
+    
