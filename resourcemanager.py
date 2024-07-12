@@ -22,7 +22,7 @@ class ResourceManager:
         else:
             try:
                 ResourceManager._instance = self
-                self.sprites = utils.load_sprites_from_xml(f"{spritesheet}/sheet.xml", f"{spritesheet}/sheet.png")
+                self.sprites = utils.load_sprites_from_xml(f"{spritesheet}/simpleSpace_sheet.xml", f"{spritesheet}/simpleSpace_sheet.png")
                 self.backgrounds = utils.get_backgrounds(backgrounds)
                 self.fonts = utils.get_fonts(fonts)
                 self.sounds = utils.get_files_in_folder(sounds)     

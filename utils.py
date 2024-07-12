@@ -1,5 +1,7 @@
 import os
 import pygame
+import math
+from typing import List
 import xml.etree.ElementTree as ET
 from constants import *
 
@@ -69,4 +71,7 @@ def draw_lives(screen, x, y, lives, img) -> None:
         img_rect.y = y
         screen.blit(img, img_rect)
 
-    
+def get_angle_between(position1 : List[int | float], position2 : List[int | float]) -> float:
+    dx = position2[0] - position1[0]
+    dy = position2[1] - position1[1]
+    return math.atan2(dy, dx)

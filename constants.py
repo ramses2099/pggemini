@@ -17,3 +17,8 @@ FPS = 60
 # Set th constant DEBUG
 DEBUG = True
 TITLE ="Pygame Game and Gimini"
+# Meteor list
+METEOR_LIST = ["meteor_detailedLarge.png" ,"meteor_detailedSmall.png","meteor_large.png" ,"meteor_small.png",
+    "meteor_squareDetailedLarge.png","meteor_squareDetailedSmall.png","meteor_squareLarge.png",
+    "meteor_squareSmall.png"
+]

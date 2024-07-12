@@ -25,7 +25,7 @@ def showFPS():
   pygame.display.set_caption(text)     
 
 
-def main():
+def main(): 
     
   running = True
   manager = SceneManager(MainMenu(resource_manager))
