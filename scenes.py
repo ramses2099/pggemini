@@ -78,29 +78,39 @@ class MainMenu(Scene):
 class GameScene(Scene):
     def __init__(self, *args):
         super().__init__()
-        self.mg_resource = args[0]
-        self.sprite = self.mg_resource.get_sprite('enemyRed1.png')
+        self.res_manager = args[0]
         self.current_level_number = 1
-        self.player = Player(self.sprite)
+        #  groups
+        self.all_sprites = pygame.sprite.Group()
+        self.bullet_group = pygame.sprite.Group()
+                
+        self.player = Player(self.res_manager, self.all_sprites, self.bullet_group)
+        for m in range(10):
+            met = Metor(self.res_manager, self.all_sprites, self.bullet_group)
+        
         self.bar = ShieldBar(5, 50)
         
     def showPlayerPoints(self, screen):    
-        points = self.player.points 
-        font = self.mg_resource.get_font('kenvector_future.ttf', 22)   
+        points = 0 
+        font = self.res_manager.get_font('kenvector_future.ttf', 22)   
         points_text = font.render(f"POINTS: {points}", True, WHITE)   
         screen.blit(points_text, ((SCREEN_WIDTH-190), 43))
         
     def showLevel(self, screen):    
         lvl = self.current_level_number
-        font = self.mg_resource.get_font('kenvector_future.ttf', 22)    
+        font = self.res_manager.get_font('kenvector_future.ttf', 22)    
         lvl_text = font.render(f"LEVEL: {lvl}", True, WHITE)   
         screen.blit(lvl_text, (5, 25))
         
     def showLives(self, screen):
-        sprite = self.mg_resource.get_sprite('playerLife3_orange.png')
-        font = self.mg_resource.get_font('kenvector_future.ttf', 22)    
-        lvl_text = font.render(f"LIVES: {self.player.lives} x", True, WHITE)   
-        screen.blit(lvl_text, (SCREEN_WIDTH - 190, 20))
+        image = self.res_manager.get_sprite('ship_J.png')
+        rect = image.get_rect()
+        sprite = pygame.transform.scale(image, (rect.width//2, rect.height//2))
+        
+        font = self.res_manager.get_font('kenvector_future.ttf', 22) 
+        lives = 3   
+        lv_text = font.render(f"LIVES: {lives} x", True, WHITE)   
+        screen.blit(lv_text, (SCREEN_WIDTH - 190, 20))
         screen.blit(sprite, (SCREEN_WIDTH - 50, 20))
         
     def process_events(self, events):
@@ -110,14 +120,16 @@ class GameScene(Scene):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.next_scene = MainMenu(self.mg_resource)
+                    self.next_scene = MainMenu(self.res_manager)
                 if event.key == pygame.K_0:
                     self.bar.decrease_bar(5)
                 if event.key == pygame.K_1:
                     self.bar.increment_bar(5)
 
     def update(self, dt):
-        pass
+        # update sprites
+        self.all_sprites.update(dt)
+        
 
     def draw(self, screen):
         screen.fill(BLACK)
@@ -126,13 +138,16 @@ class GameScene(Scene):
         self.showPlayerPoints(screen)
         self.showLives(screen)
                         
-        font = self.mg_resource.get_font('kenvector_future.ttf', 74)
-        text = font.render("Game Scene", True, WHITE)
-        screen.blit(text, (SCREEN_WIDTH//2 - text.get_width()//2, SCREEN_HEIGHT//2 - text.get_height()//2))
+        
+        
+        # draw sprite
+        
+        self.all_sprites.draw(screen)
+        self.bullet_group.draw(screen)
         
         # bar
         self.bar.draw(screen)
-        screen.blit(self.sprite,(100,100))
+        
 
 # Scene manager
 class SceneManager:
